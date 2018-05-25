@@ -49,6 +49,15 @@ srf.invite(regMiddleware, (req, res) => {
         console.log('connected');
         uac.on('destroy', () => {uas.destroy();});
         uas.on('destroy', () => {uac.destroy();});
+        
+        uac.on('info', (req, res) => {
+         res.send(200);
+         uas.request({method: 'INFO', headers: {'content-type': req.msg.headers['content-type']}, body: req.msg.body });
+        });
+        uas.on('info', (req,res) => {
+          res.send(200);
+          uac.request({method: 'INFO', headers: {'content-type': req.msg.headers['content-type']}, body: req.msg.body });
+        });
       })
       .catch((err) => {
         console.log(`Error connecting call: ${err.message}`);
